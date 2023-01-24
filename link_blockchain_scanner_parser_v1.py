@@ -106,16 +106,18 @@ def do_job():
 
  
         ### 크롬드라이버로 링크 블록체인 스캐너에서 주요거래소별 지갑 정보를 가져옴
-        
         driver.get('https://scan.blockchain.line.me/Finschia%20Mainnet/account/link1lvpzgy352969z7mlcxjfua7jsmks6swl222agc')
-        element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[3]/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div/div/div/span[3]')))
+        driver.implicitly_wait(20)
+
+        # element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[3]/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div/div/div/span[3]')))
 
         html = driver.page_source        
         soup = BeautifulSoup(html, 'html.parser')
 
         balance_info =  soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div > div.card.d-flex.flex-row > div > div.card-body.p-0 > div > div > div > div > span.text-right")
         # print("balance_info: ",balance_info)
-                     
+        # print("len(balance_info): ",len(balance_info) )
+
         driver.close()
 
         
@@ -141,49 +143,52 @@ def do_job():
         # element = WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, '//*[@id="contents"]/div[2]/div[1]/article/div[1]/div/div'))) 
 
          
+        if len(balance_info) == 0:
+            print("balnace_info is empty... passing loop once")
                  
-        try:
-            df_info_list = pd.read_csv(path_csv_file_name, index_col =0 )
+        else:
+            try:
+                df_info_list = pd.read_csv(path_csv_file_name, index_col =0 )
 
-        except:
-            temp_dic = { 'START_LINE' : { 'curr_time' : 0,'current_balance' : 0, 'var_balance':0 }}
-            df_info_list =  pd.DataFrame.from_dict(temp_dic, orient ='index')
-            #df_info_list= df_info_list.drop('START_LINE')
-
-
-        df_info_list = data_listing(balance_info, df_info_list)
-
-        temp_var_balance = df_info_list.iloc[-1,2]
-
-        if temp_var_balance>0:
-
-            mess1 = []
-            mess1.append('빗썸 wallet balance가 ')
-            mess1.append(str(temp_var_balance))
-            mess1.append(" 만큼 증가했습니다. [현재 LN 수량: ")
-            mess1.append(str(df_info_list.iloc[-1,1]))
-            mess1.append("]")
-            mess1 = ''.join(mess1)
-    
-            asyncio.run(do_work_bot(mess1))
+            except:
+                temp_dic = { 'START_LINE' : { 'curr_time' : 0,'current_balance' : 0, 'var_balance':0 }}
+                df_info_list =  pd.DataFrame.from_dict(temp_dic, orient ='index')
+                #df_info_list= df_info_list.drop('START_LINE')
 
 
-        if temp_var_balance<0:
+            df_info_list = data_listing(balance_info, df_info_list)
 
-            mess1 = []
-            mess1.append('빗썸 wallet balance가 ')
-            mess1.append(str(temp_var_balance))
-            mess1.append(" 만큼 감소했습니다. [현재 LN 수량: ")
-            mess1.append(str(df_info_list.iloc[-1,1]))
-            mess1.append("]")
-            mess1 = ''.join(mess1)
-    
-            asyncio.run(do_work_bot(mess1))
+            temp_var_balance = df_info_list.iloc[-1,2]
+
+            if temp_var_balance>0:
+
+                mess1 = []
+                mess1.append('빗썸 wallet balance가 ')
+                mess1.append(str(temp_var_balance))
+                mess1.append(" 만큼 증가했습니다. [현재 LN 수량: ")
+                mess1.append(str(df_info_list.iloc[-1,1]))
+                mess1.append("]")
+                mess1 = ''.join(mess1)
+        
+                asyncio.run(do_work_bot(mess1))
 
 
-        df_info_list.to_csv(path_csv_file_name)
+            if temp_var_balance<0:
 
-        time.sleep(10)
+                mess1 = []
+                mess1.append('빗썸 wallet balance가 ')
+                mess1.append(str(temp_var_balance))
+                mess1.append(" 만큼 감소했습니다. [현재 LN 수량: ")
+                mess1.append(str(df_info_list.iloc[-1,1]))
+                mess1.append("]")
+                mess1 = ''.join(mess1)
+        
+                asyncio.run(do_work_bot(mess1))
+
+
+            df_info_list.to_csv(path_csv_file_name)
+
+        time.sleep(30)
 
 
 
