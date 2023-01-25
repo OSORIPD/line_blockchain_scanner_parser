@@ -91,7 +91,10 @@ def do_job():
 
     while curr_try_count <  max_try_count:
         curr_try_count+= 1
-        print("program started....", curr_try_count)
+
+
+        print("\n---------------------------------------------------------------")
+        print("looping....", curr_try_count)
         # if curr_try_count % 360 ==0:
         #     bot.sendMessage(chat_id = chat_id, text ='observer??? ?????? ???.. ' +str(curr_try_count))
 
@@ -160,7 +163,7 @@ def do_job():
 
             temp_var_balance = df_info_list.iloc[-1,2]
 
-            if temp_var_balance>0:
+            if temp_var_balance>99:
 
                 mess1 = []
                 mess1.append('빗썸 wallet balance가 ')
@@ -173,7 +176,7 @@ def do_job():
                 asyncio.run(do_work_bot(mess1))
 
 
-            if temp_var_balance<0:
+            if temp_var_balance<-99:
 
                 mess1 = []
                 mess1.append('빗썸 wallet balance가 ')
