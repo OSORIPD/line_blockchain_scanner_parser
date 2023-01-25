@@ -40,7 +40,7 @@ def get_txhash_from_block_if_exist(block_height_input):
 
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
-    options.add_argument('window-size=1920x1080')
+    options.add_argument('window-size=1920x1200')
     options.add_argument("disable-gpu")
         
     driver = webdriver.Chrome('chromedriver',options=options ) 
@@ -49,7 +49,8 @@ def get_txhash_from_block_if_exist(block_height_input):
     print('target_url is.. ',target_url)
 
     driver.get(target_url)
-    driver.implicitly_wait(10)
+    time.sleep(4)
+    # driver.implicitly_wait(5)
 
     # element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[3]/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div/div/div/span[3]')))
 
@@ -83,7 +84,6 @@ def get_txhash_from_block_if_exist(block_height_input):
         print("this block has no TX")
 
     driver.close()
-
     return (block_height_input, tx_hash_return)
 
 
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
 
     try:
-        for i in range(52663550,52663555):         
+        for i in range(51775519,52665379):         
             
             if (df_info_list['block_hash'] == i).any() == False  :
                 
@@ -132,7 +132,6 @@ if __name__ == "__main__":
 
             else:
                 print ("the block was already recorded")
-
 
 
         df_info_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)        
