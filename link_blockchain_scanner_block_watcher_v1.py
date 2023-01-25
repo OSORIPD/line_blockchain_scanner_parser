@@ -13,7 +13,7 @@ import asyncio
 import pandas as pd 
 import traceback
 
-path_csv_file_name = "DB_link_blockchain_scanner_block_watcher_v1.csv"
+path_csv_file_name_frame = "DB_link_blockchain_scanner_block_watcher_v1"
 
 
 def get_time():
@@ -111,8 +111,14 @@ if __name__ == "__main__":
     
     #52660132 - 트랜잭션 1개 있는 블록
     #52660175 - 트랜잭션 없는 블록
+
+    start_block = 52000000
+    end_block = 52665379
+    path_csv_file_name = path_csv_file_name_frame + "_"+str(start_block) +".csv"
+
     try:
         df_info_list = pd.read_csv(path_csv_file_name, index_col =0 )
+        df_info_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)        
 
     except:
         temp_dic = { "START_LINE" : { 'block_hash' : 0, 'tx_hash': "DUMMY" }}
@@ -120,7 +126,8 @@ if __name__ == "__main__":
 
 
     try:
-        for i in range(51775519,52665379):         
+
+        for i in range(start_block,end_block):         
             
             if (df_info_list['block_hash'] == i).any() == False  :
                 
