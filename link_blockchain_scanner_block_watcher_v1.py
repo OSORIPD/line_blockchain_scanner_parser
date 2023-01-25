@@ -13,7 +13,7 @@ import asyncio
 import pandas as pd 
 import traceback
 
-path_csv_file_name = "DB_link_blockchain_scanner_parser_v1.csv"
+path_csv_file_name = "DB_link_blockchain_scanner_block_watcher_v1.csv"
 
 
 """가져온 데이터를 데이터프레임과 합쳐서 정렬해준다."""
@@ -63,6 +63,12 @@ def get_time():
     return timeStr
 
 
+def trim_space(str_input):
+    """str의 공백을 제거하여 반환"""
+
+    return str_input.replace(' ', '')
+    
+
 def be_int(value_input):
     
     value = value_input.replace(',', '')
@@ -83,12 +89,16 @@ def be_int(value_input):
     return int(new_str)
 
 
-"""block_number의 핀시아 블록을 서칭하여, 트랜잭션이 있을 경우, 해당 해쉬값을 string 형태로 반환함. 없을경우 빈 str을 반환함. """
-def get_txhash_from_block_if_exist(block_height):
+
+def get_txhash_from_block_if_exist(block_height_input): 
+    """
+    block_number의 핀시아 블록을 서칭하여, 트랜잭션이 있을 경우, 해당 해쉬값을 string 형태로 반환함. 없을경우 빈 str을 반환함. 
+    """
+
 
     tx_hash = ""
 
-    block_height = str(block_height)
+    block_height = str(block_height_input)
     print("\n----------------------------------------------------")
     print("block seraching started.....", block_height)
 
@@ -120,8 +130,8 @@ def get_txhash_from_block_if_exist(block_height):
 
 
     if tx_info == None or len(tx_info) == 0:
-        print("페이지 정보를 가져오는 데에 실패하였음..")
-        return ""
+        print("Failed to loading page information..")
+        return (block_height_input, "FAILED")
 
 
     if tx_info[0].text != "":
@@ -129,16 +139,16 @@ def get_txhash_from_block_if_exist(block_height):
         
         # print("tx_info_detail[0].text: ",tx_info_detail[0].text)
         
-        tx_hash = tx_info_detail[0].text
+        tx_hash = trim_space(tx_info_detail[0].text)
         
 
     else:
-        tx_hash = ""
+        tx_hash = "NA"
         print("this block has no TX")
 
     driver.close()
 
-    return tx_hash
+    return (block_height_input, tx_hash)
 
 
 
@@ -161,14 +171,42 @@ if __name__ == "__main__":
     
     # asyncio.run(do_work_bot("link wallet tracing program has been started"))
 
+    #finschia 시작: "51775519" 2022/12/22
+    
     #52660132 - 트랜잭션 1개 있는 블록
     #52660175 - 트랜잭션 없는 블록
 
+
     try:
+        df_info_list = pd.read_csv(path_csv_file_name, index_col =0 )
 
-        for i in range(52660131,52660180):
-            print(get_txhash_from_block_if_exist(i))
 
+    except:
+        curr_time = get_time()            
+
+        temp_dic = { "START_LINE" : { 'block_hash' : 0, 'tx_hash': "" }}
+        df_info_list =  pd.DataFrame.from_dict(temp_dic, orient ='index')
+
+
+
+    try:
+        for i in range(52660131,52660155):    
+            
+            if (df_info_list['block_hash'] == i).any() == False  :
+                
+                temp_tx_pair = get_txhash_from_block_if_exist(i)
+                print(temp_tx_pair) 
+                curr_time = get_time()        
+                df_info_list.loc[curr_time] = {  'block_hash' : temp_tx_pair[0], 'tx_hash':temp_tx_pair[1] }  
+                df_info_list.to_csv(path_csv_file_name)
+
+            else:
+                print ("the block was already recorded")
+
+
+        
+        df_info_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)        
+        df_info_list.to_csv(path_csv_file_name)
 
 
     except Exception as e:
