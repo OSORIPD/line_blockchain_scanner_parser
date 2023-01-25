@@ -49,7 +49,7 @@ def get_txhash_from_block_if_exist(block_height_input):
     print('target_url is.. ',target_url)
 
     driver.get(target_url)
-    time.sleep(4)
+    time.sleep(1)
     # driver.implicitly_wait(5)
 
     # element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[3]/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div/div/div/span[3]')))
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     #52660132 - 트랜잭션 1개 있는 블록
     #52660175 - 트랜잭션 없는 블록
 
-    start_block = 52000000
+    start_block = 52600000
     end_block = 52665379
     path_csv_file_name = path_csv_file_name_frame + "_"+str(start_block) +".csv"
 
