@@ -84,6 +84,7 @@ def get_txhash_from_block_if_exist(block_height_input):
         print("this block has no TX")
 
     driver.close()
+    
     return (block_height_input, tx_hash_return)
 
 
@@ -112,7 +113,7 @@ if __name__ == "__main__":
     #52660132 - 트랜잭션 1개 있는 블록
     #52660175 - 트랜잭션 없는 블록
 
-    start_block = 52600000
+    start_block = 52650000
     end_block = 52665379
     path_csv_file_name = path_csv_file_name_frame + "_"+str(start_block) +".csv"
 
@@ -121,7 +122,7 @@ if __name__ == "__main__":
         df_info_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)        
 
     except:
-        temp_dic = { "START_LINE" : { 'block_hash' : 0, 'tx_hash': "DUMMY" , 'from_address' :'NA' , 'from_balance' :0, 'to_address': 'NA', 'to_balance':0 }}
+        temp_dic = { "START_LINE" : { 'block_hash' : 0, 'tx_hash': "DUMMY" , 'search_count':0 }}
         df_info_list =  pd.DataFrame.from_dict(temp_dic, orient ='index')
 
 
@@ -134,8 +135,11 @@ if __name__ == "__main__":
                 temp_tx_pair = get_txhash_from_block_if_exist(i)
                 print(temp_tx_pair) 
                 
-                df_info_list.loc[get_time()] = {'block_hash' : temp_tx_pair[0], 'tx_hash':temp_tx_pair[1] }  
+            
+                df_info_list.loc[get_time()] = {'block_hash' : temp_tx_pair[0], 'tx_hash':temp_tx_pair[1] ,'search_count':0 }  
                 df_info_list.to_csv(path_csv_file_name)
+                # print('temp_tx_pair[1]',temp_tx_pair[1], 'type: ',type(temp_tx_pair[1]))
+
 
             else:
                 print ("the block was already recorded")
