@@ -14,8 +14,8 @@ import pandas as pd
 import traceback
 import sys
 
-path_csv_file_name_input = "DB_link_blockchain_scanner_block_watcher_v1_52650000.csv"
-path_csv_file_name_account_list = "DB_account_list_v1_52650000.csv" 
+path_csv_file_name_input = "DB_link_blockchain_scanner_block_watcher_v1_52600000.csv"
+path_csv_file_name_account_list = "DB_account_list_v1_52600000.csv" 
 
 
 def get_time():
@@ -219,7 +219,7 @@ if __name__ == "__main__":
     try:
         for row in range(0, len(df_info_list)):
                                                   
-            if df_info_list['tx_hash'].iloc[row] == 'nan' :
+            if df_info_list['tx_hash'].iloc[row] == 'nan'  or df_info_list['tx_hash'].iloc[row] == 'FAILED' :
                 print("not valid block-TX type (row)")
                 df_info_list.iloc[row, 2] += 1
                 continue
