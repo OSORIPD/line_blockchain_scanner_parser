@@ -14,8 +14,8 @@ import pandas as pd
 import traceback
 import sys
 
-path_csv_file_name_input = "DB_link_blockchain_scanner_block_watcher_v1_52600000.csv"
-path_csv_file_name_account_list = "DB_account_list_v1_52600000.csv" 
+path_csv_file_name_input = "DB_link_blockchain_scanner_block_parser_v1_52600000_52649999.csv"
+path_csv_file_name_account_list = "DB_account_list_v1_52600000_52649999.csv" 
 
 
 def get_time():
@@ -31,69 +31,9 @@ def trim_space(str_input):
     
 
 
-# def get_txhash_from_block_if_exist(block_height_input): 
-#     """
-#     block_number의 핀시아 블록을 서칭하여, 트랜잭션이 있을 경우, 해당 해쉬값을 string 형태로 반환함. 없을경우 빈 str을 반환함. 
-#     """
-
-#     block_height = str(block_height_input)
-#     print("\n----------------------------------------------------")
-#     print("block seraching started.....", block_height)
-
-#     options = webdriver.ChromeOptions()
-#     options.add_argument('headless')
-#     options.add_argument('window-size=1920x1200')
-#     options.add_argument("disable-gpu")
-        
-#     driver = webdriver.Chrome('chromedriver',options=options ) 
-
-#     target_url = 'https://scan.blockchain.line.me/Finschia%20Mainnet/blocks/' + block_height
-#     print('target_url is.. ',target_url)
-
-#     driver.get(target_url)
-#     time.sleep(1)
-#     # driver.implicitly_wait(5)
-
-#     # element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[3]/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div/div/div/span[3]')))
-
-#     html = driver.page_source        
-#     soup = BeautifulSoup(html, 'html.parser')
-
-
-#     # null_str = '<tbody role="rowgroup"></tbody>' #비어있는 tbody의 경우, [0]이 왼쪽과 같은 str을 반환함. 
-
-#     tx_info =  soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(3) > div > div > table > tbody")
-#     # print("tx_info: ",tx_info)
-#     # print("tx_info[0]: ", tx_info[0])
-#     # print(type(tx_info[0]))
-
-
-#     if tx_info == None or len(tx_info) == 0:
-#         print("Failed to loading page information..")
-#         return (block_height_input, "FAILED")
-
-
-#     if tx_info[0].text != "":
-#         tx_info_detail = soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(3) > div > div > table > tbody > tr > td > a")
-        
-#         # print("tx_info_detail[0].text: ",tx_info_detail[0].text)
-        
-#         tx_hash_return = trim_space(tx_info_detail[0].text)
-        
-
-#     else:        
-#         tx_hash_return = "NA"
-#         print("this block has no TX")
-
-#     driver.close()
-#     return (block_height_input, tx_hash_return)
-
-
 def get_accounts_from_tx_hash(tx_hash):
     """트랜잭션 해쉬로부터, from, to address를 뽑는다."""
-    
-    # tx_hash = str(tx_hash)
-    
+        
     
     print("\n----------------------------------------------------")
     print("tx_hash seraching started.....", tx_hash)
@@ -131,8 +71,6 @@ def get_accounts_from_tx_hash(tx_hash):
     if str_type == TYPE_MSG_SEND:  #ex) 7C271E8B8C9A59C37719DF4DC1025DF6D656660A800C220223450E824E57B093
         from_address_obj = soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(2) > div > table > tbody > tr:nth-child(2) > td.overflow-hidden > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > div")
         to_address_obj = soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(2) > div > table > tbody > tr:nth-child(2) > td.overflow-hidden > div > table > tbody > tr:nth-child(2) > td:nth-child(2) > div")
-        # print( from_address_obj[0].text)
-        # print( to_address_obj[0].text)
 
         from_address = str(from_address_obj[0].text)
         to_address = str(to_address_obj[0].text)
@@ -186,8 +124,6 @@ async def do_work_bot(message_to_send):
 
 if __name__ == "__main__":
     
-    # asyncio.run(do_work_bot("link wallet tracing program has been started"))
-
     #finschia 시작: "51775519" 2022/12/22
     
     #block~tx list를 가져온다.
@@ -260,8 +196,6 @@ if __name__ == "__main__":
         message = str(e)+ " " + str(trace_back)
         print (message)
         
-        # asyncio.run(do_work_bot("line wallet tracing program has been terminated by error"))
-
 
 
 

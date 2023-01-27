@@ -13,7 +13,7 @@ import asyncio
 import pandas as pd 
 import traceback
 
-path_csv_file_name_frame = "DB_link_blockchain_scanner_block_watcher_v1"
+path_csv_file_name_frame = "DB_link_blockchain_scanner_block_parser_v1"
 
 
 def get_time():
@@ -50,20 +50,12 @@ def get_txhash_from_block_if_exist(block_height_input):
 
     driver.get(target_url)
     time.sleep(1)
-    # driver.implicitly_wait(5)
-
-    # element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[3]/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div/div/div/span[3]')))
 
     html = driver.page_source        
     soup = BeautifulSoup(html, 'html.parser')
 
 
-    # null_str = '<tbody role="rowgroup"></tbody>' #비어있는 tbody의 경우, [0]이 왼쪽과 같은 str을 반환함. 
-
     tx_info =  soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(3) > div > div > table > tbody")
-    # print("tx_info: ",tx_info)
-    # print("tx_info[0]: ", tx_info[0])
-    # print(type(tx_info[0]))
 
 
     if tx_info == None or len(tx_info) == 0:
@@ -72,10 +64,7 @@ def get_txhash_from_block_if_exist(block_height_input):
 
 
     if tx_info[0].text != "":
-        tx_info_detail = soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(3) > div > div > table > tbody > tr > td > a")
-        
-        # print("tx_info_detail[0].text: ",tx_info_detail[0].text)
-        
+        tx_info_detail = soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(3) > div > div > table > tbody > tr > td > a")        
         tx_hash_return = trim_space(tx_info_detail[0].text)
         
 
@@ -84,6 +73,7 @@ def get_txhash_from_block_if_exist(block_height_input):
         print("this block has no TX")
 
     driver.close()
+    
     return (block_height_input, tx_hash_return)
 
 
@@ -105,23 +95,22 @@ async def do_work_bot(message_to_send):
 
 if __name__ == "__main__":
     
-    # asyncio.run(do_work_bot("link wallet tracing program has been started"))
-
     #finschia 시작: "51775519" 2022/12/22
     
+    #sample
     #52660132 - 트랜잭션 1개 있는 블록
     #52660175 - 트랜잭션 없는 블록
 
-    start_block = 52600000
-    end_block = 52665379
-    path_csv_file_name = path_csv_file_name_frame + "_"+str(start_block) +".csv"
+    start_block = 52650000
+    end_block = 52699999
+    path_csv_file_name = path_csv_file_name_frame + "_"+str(start_block) +"_"+str(end_block) + ".csv"
 
     try:
         df_info_list = pd.read_csv(path_csv_file_name, index_col =0 )
         df_info_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)        
 
     except:
-        temp_dic = { "START_LINE" : { 'block_hash' : 0, 'tx_hash': "DUMMY" }}
+        temp_dic = { "START_LINE" : { 'block_hash' : 0, 'tx_hash': "DUMMY" , 'search_count':0 }}
         df_info_list =  pd.DataFrame.from_dict(temp_dic, orient ='index')
 
 
@@ -133,9 +122,10 @@ if __name__ == "__main__":
                 
                 temp_tx_pair = get_txhash_from_block_if_exist(i)
                 print(temp_tx_pair) 
-                
-                df_info_list.loc[get_time()] = {'block_hash' : temp_tx_pair[0], 'tx_hash':temp_tx_pair[1] }  
+            
+                df_info_list.loc[get_time()] = {'block_hash' : temp_tx_pair[0], 'tx_hash':temp_tx_pair[1] ,'search_count':0 }  
                 df_info_list.to_csv(path_csv_file_name)
+
 
             else:
                 print ("the block was already recorded")
@@ -152,8 +142,6 @@ if __name__ == "__main__":
         message = str(e)+ " " + str(trace_back)
         print (message)
         
-        # asyncio.run(do_work_bot("line wallet tracing program has been terminated by error"))
-
 
 
 

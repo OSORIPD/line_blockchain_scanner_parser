@@ -14,7 +14,7 @@ import pandas as pd
 import traceback
 import sys
 
-path_csv_file_name_account_list = "DB_account_list_v1_52600000.csv"  #이거 하나로 읽고 쓰고 하면 됨. 
+path_csv_file_name_account_list = "DB_account_list_v1_52600000_52649999.csv"  #이거 하나로 읽고 쓰고 하면 됨. 
 
 
 def get_time():
@@ -111,8 +111,6 @@ async def do_work_bot(message_to_send):
 
 if __name__ == "__main__":
     
-    # asyncio.run(do_work_bot("link wallet tracing program has been started"))
-
     #finschia 시작: "51775519" 2022/12/22
     
   
@@ -156,8 +154,6 @@ if __name__ == "__main__":
         message = str(e)+ " " + str(trace_back)
         print (message)
         
-        # asyncio.run(do_work_bot("line wallet tracing program has been terminated by error"))
-
 
 
 
