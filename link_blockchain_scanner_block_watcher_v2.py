@@ -114,7 +114,7 @@ if __name__ == "__main__":
     #52660175 - 트랜잭션 없는 블록
 
     start_block = 52650000
-    end_block = 52665379
+    end_block = 52700000
     path_csv_file_name = path_csv_file_name_frame + "_"+str(start_block) +".csv"
 
     try:
