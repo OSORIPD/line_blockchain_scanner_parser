@@ -155,7 +155,7 @@ if __name__ == "__main__":
 
     asyncio.run(do_work_bot("block_parser_program has been started"))
 
-    code_list = [0,1,2,3,4]
+    code_list = [0,1,2,3,4,5,6,7,8,9]
     print ('--- start _multiprocessing')
 
 
@@ -164,7 +164,7 @@ if __name__ == "__main__":
     print ('--- cpu_count ', cpu_count)
 
     # cpu 수 결정
-    pool = multiprocessing.Pool(processes= 5)
+    pool = multiprocessing.Pool(processes= 10)
     
      # 실행 함수, 넘겨줄 파라미터
     
