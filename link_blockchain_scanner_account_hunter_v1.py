@@ -13,9 +13,9 @@ import asyncio
 import pandas as pd 
 import traceback
 import sys
+import os
 
-path_csv_file_name_input = "DB_link_blockchain_scanner_block_parser_v1_52600000_52649999.csv"
-path_csv_file_name_account_list = "DB_account_list_v1_52600000_52649999.csv" 
+path_csv_file_name_account_list = "DB_account_list_v1_20230128.csv"   #어카운트 리스트는 하나로 통일하되 버전관리를 위해 날짜를 새긴다.
 
 
 def get_time():
@@ -126,75 +126,90 @@ if __name__ == "__main__":
     
     #finschia 시작: "51775519" 2022/12/22
     
-    #block~tx list를 가져온다.
-    try:
-        df_info_list = pd.read_csv(path_csv_file_name_input, index_col =0 )
+    #block~tx 파일 list를 가져온다.
+    block_file_name_list = []  #이건 DB 폴더위의 파일명 리스트 전체.
 
-    except:
-        print("wrong input filed...")
-        sys.exit()
+    path = "./DB/"
+    block_file_name_list = os.listdir(path)
 
+    # print ("block_file_name_list: {}".format(block_file_name_list))
+    
+    
+    
+    for file_name in block_file_name_list:        
+    
+        adjusted_file_name = 'DB/'+file_name 
+        print(adjusted_file_name)
 
-    #tx_hash를 str로 형변환해준다.
-    df_info_list = df_info_list.astype({'tx_hash' : 'str'})
+        try:
+            df_info_list = pd.read_csv(adjusted_file_name, index_col =0 )
 
-
-
-    #account list를 생성하거나 로딩한다.
-    try:
-        df_account_list = pd.read_csv(path_csv_file_name_account_list, index_col =0 )
-        df_account_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)        
-
-    except:
-        temp_dic = { "START_LINE" : { 'account' : '' ,'search_count':0,  'balance' : 0 }}  #잔액 조회는 다른 스크립트로 짠다.
-        df_account_list =  pd.DataFrame.from_dict(temp_dic, orient ='index')
-
-
+        except:
+            print("wrong input filed...")
+            #continue
+            sys.exit()
 
 
-    try:
-        for row in range(0, len(df_info_list)):
-                                                  
-            if df_info_list['tx_hash'].iloc[row] == 'nan'  or df_info_list['tx_hash'].iloc[row] == 'FAILED' :
-                print("not valid block-TX type (row)")
-                df_info_list.iloc[row, 2] += 1
-                continue
-                        
-            #트랜잭션을 돌면서, 셀레니움으로 어카운트를 추출하여 리스트에 넣어서 파일로 떨군다.(저장까지)
-            #단, 중복되는 어카운트의 경우는 어카운트 리스트에 넣지 않아야 하겠다.
-            
-            if df_info_list['search_count'].iloc[row] > 0:                
-                print('this is searched Block and TX, passing...')            
-            
-            else:
-                df_info_list.iloc[row, 2] += 1  
-                temp_account_list = get_accounts_from_tx_hash(df_info_list['tx_hash'].iloc[row])
-                                
-                for i in range(0, len(temp_account_list)):                    
-                    
-                    print(temp_account_list[i])
-                    
-                    if (df_account_list['account'] == temp_account_list[i]).any() == False:# df_account_list에 서칭된 해당 account를포함하고 있찌 않으면. 
-                        df_account_list.loc[get_time()] = {'account': temp_account_list[i],'search_count':0,  'balance' : 0 }
-                         
-                    else:
-                        print ('that account was already inserted to the list :', temp_account_list[i])        
+        #tx_hash를 str로 형변환해준다.
+        df_info_list = df_info_list.astype({'tx_hash' : 'str'})
+
+
+
+        #account list를 생성하거나 로딩한다.
+        try:
+            df_account_list = pd.read_csv(path_csv_file_name_account_list, index_col =0 )
+            df_account_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)        
+
+        except:
+            temp_dic = { "START_LINE" : { 'account' : '' ,'search_count':0,  'balance' : 0 }}  #잔액 조회는 다른 스크립트로 짠다.
+            df_account_list =  pd.DataFrame.from_dict(temp_dic, orient ='index')
+
+
+
+
+        try:
+            for row in range(0, len(df_info_list)):
+                                                    
+                if df_info_list['tx_hash'].iloc[row] == 'nan'  or df_info_list['tx_hash'].iloc[row] == 'FAILED' :
+                    print("not valid block-TX type (row)")
+                    df_info_list.iloc[row, 2] += 1
+                    continue
+                            
+                #트랜잭션을 돌면서, 셀레니움으로 어카운트를 추출하여 리스트에 넣어서 파일로 떨군다.(저장까지)
+                #단, 중복되는 어카운트의 경우는 어카운트 리스트에 넣지 않아야 하겠다.
                 
+                if df_info_list['search_count'].iloc[row] > 0:                
+                    print('this is searched Block and TX, passing...')            
+                
+                else:
+                    df_info_list.iloc[row, 2] += 1  
+                    temp_account_list = get_accounts_from_tx_hash(df_info_list['tx_hash'].iloc[row])
+                                    
+                    for i in range(0, len(temp_account_list)):                    
+                        
+                        print(temp_account_list[i])
+                        
+                        if (df_account_list['account'] == temp_account_list[i]).any() == False:# df_account_list에 서칭된 해당 account를포함하고 있찌 않으면. 
+                            df_account_list.loc[get_time()] = {'account': temp_account_list[i],'search_count':0,  'balance' : 0 }
+                            
+                        else:
+                            print ('that account was already inserted to the list :', temp_account_list[i])        
+                    
+                
+                df_account_list.to_csv(path_csv_file_name_account_list)
+                df_info_list.to_csv(adjusted_file_name)
             
+            
+        
+            df_account_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)
             df_account_list.to_csv(path_csv_file_name_account_list)
-            df_info_list.to_csv(path_csv_file_name_input)
-        
-        
-       
-        df_account_list.drop(labels=['START_LINE'],errors='ignore', inplace=True)
-        df_account_list.to_csv(path_csv_file_name_account_list)
-        df_info_list.to_csv(path_csv_file_name_input)   
+            df_info_list.to_csv(adjusted_file_name)   
 
 
-    except Exception as e:
-        trace_back = traceback.format_exc()
-        message = str(e)+ " " + str(trace_back)
-        print (message)
+        except Exception as e:
+            trace_back = traceback.format_exc()
+            message = str(e)+ " " + str(trace_back)
+            print (message)
         
 
 
