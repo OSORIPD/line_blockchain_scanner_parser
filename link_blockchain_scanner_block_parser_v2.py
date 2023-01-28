@@ -106,7 +106,9 @@ def do_multi( code):
     
     print("do_multi.. ", code)
     #50000개 / 5프로세스 = 10000.   무조건 10000개씩 끊어서 파일 간격 맞춰서 프로세싱 돌리기.     
-    
+    message_temp = "node "+str(code)+" :block_parser_program has been started"
+    asyncio.run(do_work_bot(message_temp ))
+
     temp_start_block = start_block + code*10000
     temp_end_block = temp_start_block + 9999
     temp_path_csv_file_name = path_csv_file_name_frame + "_"+str(temp_start_block) +"_"+str(temp_end_block) + ".csv"
@@ -144,6 +146,9 @@ def do_multi( code):
 
     df_info_list.drop(labels=['START_LINE'],errors='ignore', inplace=True) 
     df_info_list.to_csv(temp_path_csv_file_name)
+
+    message_temp = "node "+str(code)+": block_parser_program has been completed"
+    asyncio.run(do_work_bot(message_temp ))
 
 
     return df_info_list
