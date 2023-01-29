@@ -34,7 +34,8 @@ def trim_space(str_input):
 def get_accounts_from_tx_hash(tx_hash):
     """트랜잭션 해쉬로부터, from, to address를 뽑는다."""
         
-    
+    return_account_list = []
+
     print("\n----------------------------------------------------")
     print("tx_hash seraching started.....", tx_hash)
 
@@ -61,6 +62,9 @@ def get_accounts_from_tx_hash(tx_hash):
 
     
     tx_type = soup.select("#app > div > div.app-content.content > div.content-wrapper > div.content-body > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(2) > div")
+    if len(tx_type) ==0:
+        return return_account_list
+    
     str_type = trim_space(tx_type[0].text)
     
     print( str_type)
@@ -95,7 +99,6 @@ def get_accounts_from_tx_hash(tx_hash):
      
      
     
-    return_account_list = []
     
     if(from_address != ""):        
         return_account_list.append(from_address)        

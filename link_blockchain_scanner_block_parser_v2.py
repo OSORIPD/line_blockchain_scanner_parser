@@ -106,7 +106,7 @@ def do_multi( code):
     
     print("do_multi.. ", code)
     #50000개 / 5프로세스 = 10000.   무조건 10000개씩 끊어서 파일 간격 맞춰서 프로세싱 돌리기.     
-    message_temp = "node "+str(code)+" :block_parser_program has been started"
+    message_temp = "node "+str(code)+": block_parser_program has been started"
     asyncio.run(do_work_bot(message_temp ))
 
     temp_start_block = start_block + code*10000
@@ -158,30 +158,38 @@ def do_multi( code):
 
 if __name__ == "__main__":
 
-    asyncio.run(do_work_bot("block_parser_program has been started"))
+    try:
+        asyncio.run(do_work_bot("block_parser_program has been started"))
 
-    code_list = [0,1,2,3,4,5,6,7,8,9]
-    print ('--- start _multiprocessing')
+        code_list = [0,1,2,3,4,5,6,7,8,9]
+        print ('--- start _multiprocessing')
 
 
-    # cpu 갯수 확인
-    cpu_count = multiprocessing.cpu_count()
-    print ('--- cpu_count ', cpu_count)
+        # cpu 갯수 확인
+        cpu_count = multiprocessing.cpu_count()
+        print ('--- cpu_count ', cpu_count)
 
-    # cpu 수 결정
-    pool = multiprocessing.Pool(processes= 10)
-    
-     # 실행 함수, 넘겨줄 파라미터
-    
-    pool.map(do_multi, code_list)
+        # cpu 수 결정
+        pool = multiprocessing.Pool(processes= 10)
+        
+        # 실행 함수, 넘겨줄 파라미터
+        
+        pool.map(do_multi, code_list)
 
-    # 모든 프로세스 종료까지 기다림
-    pool.close()
-    pool.join()
-    
-    print ('--- end _multiprocessing')
+        # 모든 프로세스 종료까지 기다림
+        pool.close()
+        pool.join()
+        
+        print ('--- end _multiprocessing')
 
-    asyncio.run(do_work_bot("block_parser_program has been completed"))
+        asyncio.run(do_work_bot("block_parser_program has been completed"))
+
+
+    except Exception as e:
+        trace_back = traceback.format_exc()
+        message = str(e)+ " " + str(trace_back)
+        print (message)
+        asyncio.run(do_work_bot("program has been terminated"))
 
 
 
