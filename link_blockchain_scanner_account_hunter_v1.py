@@ -143,7 +143,7 @@ if __name__ == "__main__":
     for file_name in block_file_name_list:        
     
         adjusted_file_name = 'DB_52500000_52599999/'+file_name 
-        print(adjusted_file_name)
+        print('processing... ',adjusted_file_name)
 
         try:
             df_info_list = pd.read_csv(adjusted_file_name, index_col =0 )
