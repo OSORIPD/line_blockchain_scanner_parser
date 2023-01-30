@@ -154,7 +154,7 @@ if __name__ == "__main__":
         trace_back = traceback.format_exc()
         message = str(e)+ " " + str(trace_back)
         print (message) 
-            asyncio.run(do_work_bot("account balance checker program has been completed"))
+        asyncio.run(do_work_bot("account balance checker program has been terminated"))
 
         
 
