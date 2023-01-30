@@ -113,7 +113,8 @@ if __name__ == "__main__":
     
     #finschia 시작: "51775519" 2022/12/22
     
-  
+    asyncio.run(do_work_bot("account balance checker program has been started"))
+
     #account list를 생성하거나 로딩한다. 없을 경우, 오류로 처리하고 프로그램 종료.
     try:
         df_account_list = pd.read_csv(path_csv_file_name_account_list, index_col =0 )
@@ -152,11 +153,14 @@ if __name__ == "__main__":
     except Exception as e:
         trace_back = traceback.format_exc()
         message = str(e)+ " " + str(trace_back)
-        print (message)
+        print (message) 
+            asyncio.run(do_work_bot("account balance checker program has been completed"))
+
         
 
 
 
 
 
+    asyncio.run(do_work_bot("account balance checker program has been completed"))
 

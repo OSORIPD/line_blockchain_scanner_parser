@@ -36,7 +36,7 @@ def get_accounts_from_tx_hash(tx_hash):
         
     return_account_list = []
 
-    print("\n----------------------------------------------------")
+    # print("\n----------------------------------------------------")
     print("tx_hash seraching started.....", tx_hash)
 
     options = webdriver.ChromeOptions()
@@ -128,11 +128,12 @@ async def do_work_bot(message_to_send):
 if __name__ == "__main__":
     
     #finschia 시작: "51775519" 2022/12/22
-    
+    asyncio.run(do_work_bot("account hunter_program has been started"))
+
     #block~tx 파일 list를 가져온다.
     block_file_name_list = []  #이건 DB 폴더위의 파일명 리스트 전체.
 
-    path = "./DB/"
+    path = "./DB_52500000_52599999/"
     block_file_name_list = os.listdir(path)
 
     # print ("block_file_name_list: {}".format(block_file_name_list))
@@ -141,7 +142,7 @@ if __name__ == "__main__":
     
     for file_name in block_file_name_list:        
     
-        adjusted_file_name = 'DB/'+file_name 
+        adjusted_file_name = 'DB_52500000_52599999/'+file_name 
         print(adjusted_file_name)
 
         try:
@@ -185,7 +186,9 @@ if __name__ == "__main__":
                     print('this is searched Block and TX, passing...')            
                 
                 else:
-                    df_info_list.iloc[row, 2] += 1  
+                    df_info_list.iloc[row, 2] += 1
+                    print('--------------------------------------------------------') 
+                    print('the file name: ',adjusted_file_name)
                     temp_account_list = get_accounts_from_tx_hash(df_info_list['tx_hash'].iloc[row])
                                     
                     for i in range(0, len(temp_account_list)):                    
@@ -213,7 +216,11 @@ if __name__ == "__main__":
             trace_back = traceback.format_exc()
             message = str(e)+ " " + str(trace_back)
             print (message)
-        
+            asyncio.run(do_work_bot("program has been terminated"))
+
+
+    asyncio.run(do_work_bot("block_parser_program has been completed"))
+
 
 
 
