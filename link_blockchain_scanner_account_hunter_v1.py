@@ -143,7 +143,7 @@ if __name__ == "__main__":
     for file_name in block_file_name_list:        
     
         adjusted_file_name = 'DB_52500000_52599999/'+file_name 
-        print(adjusted_file_name)
+        print('processing... ',adjusted_file_name)
 
         try:
             df_info_list = pd.read_csv(adjusted_file_name, index_col =0 )
@@ -175,7 +175,7 @@ if __name__ == "__main__":
             for row in range(0, len(df_info_list)):
                                                     
                 if df_info_list['tx_hash'].iloc[row] == 'nan'  or df_info_list['tx_hash'].iloc[row] == 'FAILED' :
-                    print("not valid block-TX type (row)")
+                    #print("not valid block-TX type (row)")
                     df_info_list.iloc[row, 2] += 1
                     continue
                             
@@ -183,7 +183,8 @@ if __name__ == "__main__":
                 #단, 중복되는 어카운트의 경우는 어카운트 리스트에 넣지 않아야 하겠다.
                 
                 if df_info_list['search_count'].iloc[row] > 0:                
-                    print('this is searched Block and TX, passing...')            
+                    #print('this is searched Block and TX, passing...')            
+                    pass
                 
                 else:
                     df_info_list.iloc[row, 2] += 1
@@ -216,7 +217,7 @@ if __name__ == "__main__":
             trace_back = traceback.format_exc()
             message = str(e)+ " " + str(trace_back)
             print (message)
-            asyncio.run(do_work_bot("program has been terminated"))
+            asyncio.run(do_work_bot("block_parser_program program has been terminated"))
 
 
     asyncio.run(do_work_bot("block_parser_program has been completed"))
