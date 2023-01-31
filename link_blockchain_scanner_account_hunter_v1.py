@@ -40,9 +40,14 @@ def get_accounts_from_tx_hash(tx_hash):
     print("tx_hash seraching started.....", tx_hash)
 
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    options.add_argument('headless')   
     options.add_argument('window-size=1920x1200')
     options.add_argument("disable-gpu")
+    options.add_argument('--incognito')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-setuid-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
         
     driver = webdriver.Chrome('chromedriver',options=options ) 
     target_url = 'https://scan.blockchain.line.me/Finschia%20Mainnet/tx/' + tx_hash
