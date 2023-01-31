@@ -172,7 +172,7 @@ if __name__ == "__main__":
 
 
         try:
-            for row in range(0, len(df_info_list)):
+            for row in range(0, len(df_info_list)-1):
                                                     
                 if df_info_list['tx_hash'].iloc[row] == 'nan'  or df_info_list['tx_hash'].iloc[row] == 'FAILED' :
                     #print("not valid block-TX type (row)")
