@@ -145,12 +145,15 @@ if __name__ == "__main__":
                 df_account_list.iloc[row, 1] += 1  
 
                 temp_balance = get_account_balance(df_account_list['account'].iloc[row])
-                print(temp_balance)
-                df_account_list.iloc[row, 2] = temp_balance
-                               
-            df_account_list.to_csv(path_csv_file_name_account_list)
+                print('row ',row , ': ',temp_balance)
+                df_account_list.iloc[row, 2] = temp_balance 
+                      
+            if row % 10 == 0:
+                df_account_list.to_csv(path_csv_file_name_account_list)
        
         df_account_list.to_csv(path_csv_file_name_account_list)
+
+        asyncio.run(do_work_bot("account balance checker program has been completed"))
 
 
     except Exception as e:
@@ -159,5 +162,4 @@ if __name__ == "__main__":
         print (message) 
         asyncio.run(do_work_bot("account balance checker program has been terminated"))
 
-    asyncio.run(do_work_bot("account balance checker program has been completed"))
 

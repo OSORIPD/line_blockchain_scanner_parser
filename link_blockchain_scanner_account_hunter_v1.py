@@ -207,9 +207,9 @@ if __name__ == "__main__":
                         else:
                             print ('that account was already inserted to the list :', temp_account_list[i])        
                     
-                
-                df_account_list.to_csv(path_csv_file_name_account_list)
-                df_info_list.to_csv(adjusted_file_name)
+                if row % 10 == 0:
+                    df_account_list.to_csv(path_csv_file_name_account_list)
+                    df_info_list.to_csv(adjusted_file_name)
             
             
         
