@@ -49,7 +49,7 @@ def get_accounts_from_tx_hash(tx_hash):
     print('target_url is.. ',target_url)
 
     driver.get(target_url)
-    time.sleep(1)
+    time.sleep(2)
 
     html = driver.page_source        
     soup = BeautifulSoup(html, 'html.parser')
@@ -217,10 +217,9 @@ if __name__ == "__main__":
             trace_back = traceback.format_exc()
             message = str(e)+ " " + str(trace_back)
             print (message)
-            asyncio.run(do_work_bot("block_parser_program program has been terminated"))
 
 
-    asyncio.run(do_work_bot("block_parser_program has been completed"))
+    asyncio.run(do_work_bot("account_hunter program has been completed"))
 
 
 
