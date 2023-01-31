@@ -40,16 +40,21 @@ def get_accounts_from_tx_hash(tx_hash):
     print("tx_hash seraching started.....", tx_hash)
 
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    options.add_argument('headless')   
     options.add_argument('window-size=1920x1200')
     options.add_argument("disable-gpu")
+    options.add_argument('--incognito')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-setuid-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
         
     driver = webdriver.Chrome('chromedriver',options=options ) 
     target_url = 'https://scan.blockchain.line.me/Finschia%20Mainnet/tx/' + tx_hash
     print('target_url is.. ',target_url)
 
     driver.get(target_url)
-    time.sleep(1)
+    time.sleep(2)
 
     html = driver.page_source        
     soup = BeautifulSoup(html, 'html.parser')
@@ -172,7 +177,7 @@ if __name__ == "__main__":
 
 
         try:
-            for row in range(0, len(df_info_list)):
+            for row in range(0, len(df_info_list)-1):
                                                     
                 if df_info_list['tx_hash'].iloc[row] == 'nan'  or df_info_list['tx_hash'].iloc[row] == 'FAILED' :
                     #print("not valid block-TX type (row)")
@@ -202,9 +207,9 @@ if __name__ == "__main__":
                         else:
                             print ('that account was already inserted to the list :', temp_account_list[i])        
                     
-                
-                df_account_list.to_csv(path_csv_file_name_account_list)
-                df_info_list.to_csv(adjusted_file_name)
+                if row % 10 == 0:
+                    df_account_list.to_csv(path_csv_file_name_account_list)
+                    df_info_list.to_csv(adjusted_file_name)
             
             
         
@@ -217,10 +222,9 @@ if __name__ == "__main__":
             trace_back = traceback.format_exc()
             message = str(e)+ " " + str(trace_back)
             print (message)
-            asyncio.run(do_work_bot("block_parser_program program has been terminated"))
 
 
-    asyncio.run(do_work_bot("block_parser_program has been completed"))
+    asyncio.run(do_work_bot("account_hunter program has been completed"))
 
 
 
