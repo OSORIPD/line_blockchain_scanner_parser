@@ -70,7 +70,7 @@ def get_txhash_from_block_if_exist(block_height_input):
     # print('target_url is.. ',target_url)
 
     driver.get(target_url)
-    time.sleep(1)
+    time.sleep(2)
 
     html = driver.page_source        
     soup = BeautifulSoup(html, 'html.parser')
@@ -137,7 +137,9 @@ def do_multi( code):
             # print(code, temp_tx_pair) 
         
             df_info_list.loc[get_time()] = {'block_hash' : temp_tx_pair[0], 'tx_hash':temp_tx_pair[1] ,'search_count':0 }  
-            df_info_list.to_csv(temp_path_csv_file_name)
+            
+            if i % 100 ==0:
+                df_info_list.to_csv(temp_path_csv_file_name)
 
         else:
             pass
