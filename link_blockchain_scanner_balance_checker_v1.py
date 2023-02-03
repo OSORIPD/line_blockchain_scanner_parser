@@ -132,8 +132,11 @@ if __name__ == "__main__":
 
 
 
+    max_line = len(df_account_list)
+
+
     try:
-        for row in range(0, len(df_account_list)):
+        for row in range(0, max_line):
 
             #search_count:  df_account_list.iloc[row, 1]
             #balance:  df_account_list.iloc[row, 2]
@@ -145,7 +148,7 @@ if __name__ == "__main__":
                 df_account_list.iloc[row, 1] += 1  
 
                 temp_balance = get_account_balance(df_account_list['account'].iloc[row])
-                print('row ',row , ': ',temp_balance)
+                print('row ',row ,'/', max_line, ': ', temp_balance)
                 df_account_list.iloc[row, 2] = temp_balance 
                       
             if row % 10 == 0:
