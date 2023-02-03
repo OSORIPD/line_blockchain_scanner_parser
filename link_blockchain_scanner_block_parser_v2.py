@@ -163,7 +163,7 @@ if __name__ == "__main__":
     try:
         asyncio.run(do_work_bot("block_parser_program has been started"))
 
-        code_list = [0,1,2,3,4,5,6,7,8]
+        code_list = [0,1,2,3,4,5,6,7,8,9]
         print ('--- start _multiprocessing')
 
 
