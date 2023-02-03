@@ -23,7 +23,7 @@ path_csv_file_name_frame = "DB\DB_link_blockchain_scanner_block_parser_v1"
 #sample
 #52660132 - 트랜잭션 1개 있는 블록
 #52660175 - 트랜잭션 없는 블록
-start_block = 52700000
+start_block = 52800000
 
 
 def get_time():
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     try:
         asyncio.run(do_work_bot("block_parser_program has been started"))
 
-        code_list = [0,1,2,3,4,5,6,7,8,9]
+        code_list = [0,1,2,3,4,5,6,7,8]
         print ('--- start _multiprocessing')
 
 
@@ -172,7 +172,7 @@ if __name__ == "__main__":
         print ('--- cpu_count ', cpu_count)
 
         # cpu 수 결정
-        pool = multiprocessing.Pool(processes= 10)
+        pool = multiprocessing.Pool(processes= len(code_list))
         
         # 실행 함수, 넘겨줄 파라미터
         
