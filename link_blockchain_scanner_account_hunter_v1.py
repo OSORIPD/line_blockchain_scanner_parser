@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
     # print ("block_file_name_list: {}".format(block_file_name_list))
     
-    
+    isFailed = False
     
     for file_name in block_file_name_list:        
     
@@ -194,7 +194,7 @@ if __name__ == "__main__":
                 else:
                     df_info_list.iloc[row, 2] += 1
                     print('--------------------------------------------------------') 
-                    print('the file name: ',adjusted_file_name)
+                    print('the file name: ',adjusted_file_name, '...row ',row)
                     temp_account_list = get_accounts_from_tx_hash(df_info_list['tx_hash'].iloc[row])
                                     
                     for i in range(0, len(temp_account_list)):                    
@@ -223,8 +223,15 @@ if __name__ == "__main__":
             message = str(e)+ " " + str(trace_back)
             print (message)
 
+            isFailed =True
+            
+            
+    if(isFailed==False):
+        asyncio.run(do_work_bot("account_hunter program has been completed"))
+    
+    else:
+        asyncio.run(do_work_bot("account_hunter program has been terminated"))
 
-    asyncio.run(do_work_bot("account_hunter program has been completed"))
 
 
 
