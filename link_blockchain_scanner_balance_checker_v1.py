@@ -141,8 +141,9 @@ if __name__ == "__main__":
             #search_count:  df_account_list.iloc[row, 1]
             #balance:  df_account_list.iloc[row, 2]
 
-            if df_account_list['search_count'].iloc[row] > 0:                
-                print('this is already searched account, passing...')            
+            if df_account_list['search_count'].iloc[row] > 0:  
+                pass              
+                # print('this is already searched account, passing...')            
             
             else:
                 df_account_list.iloc[row, 1] += 1  
