@@ -23,7 +23,7 @@ path_csv_file_name_frame = "DB\DB_link_blockchain_scanner_block_parser_v1"
 #sample
 #52660132 - 트랜잭션 1개 있는 블록
 #52660175 - 트랜잭션 없는 블록
-start_block = 52900000
+start_block = 53000000
 
 
 def get_time():
