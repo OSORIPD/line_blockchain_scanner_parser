@@ -138,7 +138,7 @@ if __name__ == "__main__":
     #block~tx 파일 list를 가져온다.
     block_file_name_list = []  #이건 DB 폴더위의 파일명 리스트 전체.
 
-    path = "./DB_52800000_52899999/"
+    path = "./DB_53000000_53099999/"
     block_file_name_list = os.listdir(path)
 
     # print ("block_file_name_list: {}".format(block_file_name_list))
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     
     for file_name in block_file_name_list:        
     
-        adjusted_file_name = 'DB_52800000_52899999/'+file_name 
+        adjusted_file_name = 'DB_53000000_53099999/'+file_name 
         print('processing... ',adjusted_file_name)
 
         try:
