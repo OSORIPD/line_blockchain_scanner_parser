@@ -14,7 +14,7 @@ import pandas as pd
 import traceback
 import sys
 
-path_csv_file_name_account_list = "DB_account_list_v1_20230128_reported_20230206.csv"  #이거 하나로 읽고 쓰고 하면 됨. 
+path_csv_file_name_account_list = "DB_account_list_v1_20230128.csv"  #이거 하나로 읽고 쓰고 하면 됨. 
 
 
 def get_time():
