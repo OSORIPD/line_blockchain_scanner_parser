@@ -110,7 +110,7 @@ def do_job():
  
         ### 크롬드라이버로 링크 블록체인 스캐너에서 주요거래소별 지갑 정보를 가져옴
         driver.get('https://scan.blockchain.line.me/Finschia%20Mainnet/account/link1lvpzgy352969z7mlcxjfua7jsmks6swl222agc')
-        driver.implicitly_wait(20)
+        time.sleep(20)
 
         # element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]/div/div[3]/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div/div/div/span[3]')))
 
@@ -163,7 +163,7 @@ def do_job():
 
             temp_var_balance = df_info_list.iloc[-1,2]
 
-            if temp_var_balance>99:
+            if temp_var_balance>999:
 
                 mess1 = []
                 mess1.append('빗썸 wallet balance가 ')
@@ -176,7 +176,7 @@ def do_job():
                 asyncio.run(do_work_bot(mess1))
 
 
-            if temp_var_balance<-99:
+            if temp_var_balance<-999:
 
                 mess1 = []
                 mess1.append('빗썸 wallet balance가 ')
